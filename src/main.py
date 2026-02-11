@@ -1,0 +1,1 @@
+print("Hello from Secure Smart Farm Hub!")
