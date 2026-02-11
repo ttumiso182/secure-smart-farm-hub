@@ -1,0 +1,6 @@
+numpy
+scikit-learn
+cryptography
+paho-mqtt
+pandas
+requests
