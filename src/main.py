@@ -7,6 +7,8 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score # for checking model quality
 from sklearn.model_selection import train_test_split
+from cryptography.fernet import Fernet
+import paho.mqtt.client as mqtt
 
 # Replace with your free OpenWeatherMap API key
 API_KEY = '061b8234f273f7a8d0fcf3efd68a7f92'  # e.g., 'b1b15e88fa797225412429c1c50c122a1'
@@ -59,6 +61,11 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 print(f"Model Accuracy: {accuracy_score(y_test, y_pred):.2f}")  
 
+# Generate a secure encryption key (in production, save/load this securely; regenerate each run for simplicity)
+key = Fernet.generate_key()
+cipher = Fernet(key)
+print(f"Encryption Key generated: {key.decode()}") # For demo; don't print in real apps!
+
 # Main loop to simulate continuous monitoring
 while True:
     sensor_data = read_sensors()
@@ -72,4 +79,28 @@ while True:
         print("Irrigation needed! Activating water pump...")
     else:
         print("No irrigation needed at the moment.")
+
+    
+    # Combine data with prediction for "transmission"
+    full_data = {
+        "sensors": sensor_data,
+        "prediction": "Irrigation needed" if prediction == 1 else "No irrigation needed"
+    }
+
+    # Encrypt the data
+    encrypted_data = cipher.encrypt(json.dumps(full_data).encode())
+    print(f"Encrypted data: {encrypted_data[:50]}...")  # Show snippet; it's now secure gibberish!
+
+    #Basic anomaly detection (cybersecurity check)
+    if sensor_data['temp'] > 50 or sensor_data['temp'] < 0: # Impossible for Mpumalanga
+        print("Cyber Alert: Possible data tampering detected!")
+    else:
+        # Simulate secure transmission via free MQTT broker
+        client = mqtt.Client()
+        try: 
+            client.connect("broker.emqx.io", 1883, 60) # Free public broker, no auth needed
+            client.publish("smart_farm_hub/secure_data", encrypted_data) # Topic for your "hub"
+            print("Secure encrypted data sent to broker!")
+        except Exception as e:
+            print(f"MQTT error: {e}. Data not sent.")
     time.sleep(5)  # Simulate reading every 5 seconds
