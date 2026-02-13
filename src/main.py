@@ -8,7 +8,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score # for checking model quality
 from sklearn.model_selection import train_test_split
 from cryptography.fernet import Fernet
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt_client  # Alias to avoid conflicts
+from paho.mqtt.client import CallbackAPIVersion  # For versioning
 
 # Replace with your free OpenWeatherMap API key
 API_KEY = '061b8234f273f7a8d0fcf3efd68a7f92'  # e.g., 'b1b15e88fa797225412429c1c50c122a1'
@@ -71,7 +72,8 @@ while True:
     sensor_data = read_sensors()
     print(f"Farm Sensor Data: {sensor_data}")
     # Prepare features for prediction (ensure order matches training)           
-    features = np.array([[sensor_data['temp'], sensor_data['humidity'], sensor_data['soil_moisture']]])  # 'soil_moisture' as 'ph'
+    features = pd.DataFrame([[sensor_data['temp'], sensor_data['humidity'], sensor_data['soil_moisture']]],
+                        columns=['temperature', 'humidity', 'ph'])  # 'ph' is our soil proxy
 
     # Predict
     prediction = model.predict(features)[0]
@@ -96,7 +98,7 @@ while True:
         print("Cyber Alert: Possible data tampering detected!")
     else:
         # Simulate secure transmission via free MQTT broker
-        client = mqtt.Client()
+        client = mqtt_client.Client(CallbackAPIVersion.VERSION1)
         try: 
             client.connect("broker.emqx.io", 1883, 60) # Free public broker, no auth needed
             client.publish("smart_farm_hub/secure_data", encrypted_data) # Topic for your "hub"
