@@ -24,7 +24,7 @@ Relevant to Mpumalanga agriculture (e.g., macadamia or citrus farms) for monitor
 - Tools: VS Code, GitHub
 
 ## Setup
-1. **Clone the Repo**: In VS Code, Git: Clone > https://github.com/tumiso/secure-smart-farm-hub.git
+1. **Clone the Repo**: In VS Code, Git: Clone > https://github.com/ttumiso182/secure-smart-farm-hub.git
 2. **Virtual Environment** (using Anaconda for your setup):
    - Open terminal in VS Code: `conda activate base` (or create a new one: `conda create -n farm-hub python=3.10 && conda activate farm-hub`)
 3. **Install Dependencies**:
