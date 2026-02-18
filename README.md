@@ -38,12 +38,12 @@ pip install numpy scikit-learn cryptography paho-mqtt pandas requests
 3. Output: Model trains, then loops every 5s with sensor data, AI prediction, encryption, and "send" confirmation.
 - Example:
 
-1. Model Accuracy: 0.91
-2. Encryption Key generated: sWihMQVTpAvG3lgglx5IGqvrtx5u5O_OozUT1auYnP4=
-3. Farm Sensor Data: {'temp': 28.160000000000025, 'humidity': 61, 'soil_moisture': 64.76593144532957}
-4. Irrigation needed! Activating water pump...
-5. Encrypted data: b'gAAAAABpjusp1mL6byQ66OXqt6bQ9FE99dwXSyHAD3mXCcmIWm'...
-6. Secure encrypted data sent to broker!
+      Model Accuracy: 0.91
+      Encryption Key generated: sWihMQVTpAvG3lgglx5IGqvrtx5u5O_OozUT1auYnP4=
+      Farm Sensor Data: {'temp': 28.160000000000025, 'humidity': 61, 'soil_moisture': 64.76593144532957}
+      Irrigation needed! Activating water pump...
+      Encrypted data: b'gAAAAABpjusp1mL6byQ66OXqt6bQ9FE99dwXSyHAD3mXCcmIWm'...
+      Secure encrypted data sent to broker!
 
 4. Stop: Ctrl+C (adds graceful exit if you implemented the try/except).
 5. Test MQTT: Use free MQTT Explorer app to subscribe to "smart_farm_hub/secure_data" on broker.emqx.io—see encrypted payloads.
